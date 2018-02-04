@@ -11,7 +11,7 @@ MongoClient.connect(url, (err, db) => {
     console.log('connected to mongodb server. ');
 
 
-    // // fetching all the documents with a given critirea
+    // // fetching all the documents with a given criteria ================================
     // db.collection('Todos').find({
     //     _id: ObjectID("5a5a29ac5d483429ecc6a953")
     // }).toArray()
@@ -22,14 +22,14 @@ MongoClient.connect(url, (err, db) => {
     //     console.log('Unable to fetch todos', err);
     // });
 
-    // // counting the number of documents
+    // // counting the number of documents  =====================================
     // db.collection('Todos').find().count().then((count) => {
     //     console.log('Todos count: '+ count);
     // }, (err) => {
     //     console.log('Unable to fetch todos', err);
     // });
 
-    db.collection('Users').find({name: 'Mathiew'}).toArray()
+    db.collection('Users').find({name: 'Andrew'}).toArray()
     .then((docs) => {
         console.log('Users: \n' + JSON.stringify(docs, undefined, 2));
     }, (error) => {
