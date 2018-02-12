@@ -14,6 +14,10 @@ let Todo = mongoose.model('Todo', {
     completedAt: {
         type: Number,
         default: null   
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
     }
 });
 
