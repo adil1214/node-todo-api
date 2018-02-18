@@ -1,26 +1,41 @@
-var express = require('express');
-var bodyParser = require('body-parser');    
+let express = require('express');
+let bodyParser = require('body-parser');    
 
-var {mongoose} = require('./db/mongoose');
-var {Todo} = require('./models/todo');
-var {User} = require('./models/user');
+let {mongoose} = require('./db/mongoose');
+let {Todo} = require('./models/todo');
+let {User} = require('./models/user');
 
 
 
-var app = express();
+let app = express();
 
 app.use(bodyParser.json());  
 
+app.get('/', (req, res) => {
+    res.status(201).send(
+        '<h1>Welcome to the homepage :D <h1>' +
+        '\n' + 
+        '<h3><a href="/todos">Todos</a></h3>'
+    );
+});
+
 app.get('/todos', (req, res) => {
-    Todo.find({}).then((docs) => {
-        res.status(200).json(docs);
+    Todo.find({}).then((todos) => {
+        res.status(200).send({
+            todos,
+            ourStatusCode: 420
+        });
+
+    let nowDate = new Date();
+
+    console.log('Fetching all the todos from the database at '+ nowDate.toLocaleString() );
     }).catch((e) => {
         res.status(400).send(e);
     })
 });
 
 // post route
-app.post('/todos', (req, res, next) => {
+app.post('/todos', (req, res) => {
     let todo = new Todo({
         text: req.body.text,
         completed: req.body.completed
