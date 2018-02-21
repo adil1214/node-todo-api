@@ -26,9 +26,9 @@ app.get('/todos', (req, res) => {
             ourStatusCode: 420
         });
 
-    let nowDate = new Date();
+        let nowDate = new Date();
 
-    console.log('Fetching all the todos from the database at '+ nowDate.toLocaleString() );
+        console.log('Fetching all the todos from the database at '+ nowDate.toLocaleString() );
     }).catch((e) => {
         res.status(400).send(e);
     })

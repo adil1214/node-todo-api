@@ -5,14 +5,29 @@ const request = require('supertest');
 let {app} = require('./../server');
 let {Todo} = require('./../models/todo');
 
+const todosText = [{
+    text: 'first test todo'
+}, {
+    text: 'second test todo'
+}, {
+    text: 'third test todo'
+}];
+
 // this is a hook that runs berfore each execution of a test
 beforeEach((done) => {
-    Todo.remove({}).then(() => done());
+    Todo.remove({}).then(() => {
+        return Todo.insertMany(todosText);
+    }).then( () => {
+        done();
+    }).catch(() => {
+        done();
+    });
+    
 });
 
 describe('POST /todos', () => {
     it('Should create a new todo', (done) => {
-        let text1 = 'test todo text';
+        let text1 = 'testing post request ...';
 
         request(app)
             .post('/todos')
@@ -26,7 +41,7 @@ describe('POST /todos', () => {
                     return done(err);
                 }
 
-                Todo.find().then((todos) => {
+                Todo.find({text:text1}).then((todos) => {
                     expect(todos.length).toBe(1);
                     expect(todos[0].text).toBe(text1);
                     done();
@@ -34,7 +49,7 @@ describe('POST /todos', () => {
             });
     });
 
-    it('Should not create todo with invalide body data', () => {
+    it('Should not create todo with invalide body data', (done) => {
         request(app)
             .post('/todos')
             .send()
@@ -45,12 +60,25 @@ describe('POST /todos', () => {
                 }
                 
                 Todo.find().then((docs) => {
-                    expect(docs.length).toBe(0);
+                    expect(docs.length).toBe(3);
                     done();
                 }).catch((e) => {
                     done(e);
                 });
-            })
+            });
     });
 
+});
+
+
+describe('GET /todos', () => {
+    it('should get all todos', (done) => {
+        request(app)
+            .get('/todos')
+            .expect(200)
+            .expect((res) => {
+                expect(res.body.todos.length).toBe(3);
+            }).end(done);
+        
+    });
 });
