@@ -19,6 +19,16 @@ app.get('/', (req, res) => {
     );
 });
 
+// users GET route
+app.get('/users', (req, res) => {
+    User.find().then((users) => {
+        res.status(200).send(users);
+    }).catch((e) => {
+        res.status(400).send(e);
+    });
+});
+
+// todos GET route
 app.get('/todos', (req, res) => {
     Todo.find({}).then((todos) => {
         res.status(200).send({
