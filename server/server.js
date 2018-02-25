@@ -37,9 +37,7 @@ app.get('/todos', (req, res) => {
             ourStatusCode: 420
         });
 
-        let nowDate = new Date();
-
-        console.log('Fetching all the todos from the database at '+ nowDate.toLocaleString() );
+        // console.log('Fetching all the todos from the database at '+ new Date().toLocaleString() );
     }).catch((e) => {
         res.status(400).send(e);
     })
@@ -57,6 +55,7 @@ app.get('/todos/:id', (req, res) => {
         if (!doc) {
             res.status(404).send({error: 'id not found in the database'});
         } else {
+            // console.log('Fetching the todo with the id \"'+reqId+ '\" at ' + new Date().toLocaleString() );
             res.status(200).send(doc);
         }
     }).catch((e) => {
