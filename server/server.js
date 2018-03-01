@@ -11,11 +11,13 @@ const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());  
 
-app.get('/', (req, res) => {
+app.get('/', (req, res) => {        //homepage route
     res.status(201).send(
         '<h1>Welcome to the homepage :D <h1>' +
         '\n' + 
-        '<h3><a href="/todos">Todos</a></h3>'
+        '<h3><a href="/todos">Todos</a></h3>' +
+        '\n' + 
+        '<h3><a href="/users">Users</a></h3>'
     );
 });
 
@@ -55,6 +57,24 @@ app.get('/todos/:id', (req, res) => {
             res.status(404).send({error: 'id not found in the database'});
         } else {
             // console.log('Fetching the todo with the id \"'+reqId+ '\" at ' + new Date().toLocaleString() );
+            res.status(200).send(doc);
+        }
+    }).catch((e) => {
+        res.status(400).send(e);
+    });
+});
+
+// todo by id DELETE route
+app.delete('/todos/:id', (req, res) => {
+    let reqId = req.params.id
+    if (!ObjectID.isValid(reqId)) {
+        return res.status(404).send();
+    }
+
+    Todo.findByIdAndRemove(reqId).then((doc) => {
+        if (!doc) {
+            res.status(404).send({error: 'id not found in the database'});
+        } else {
             res.status(200).send(doc);
         }
     }).catch((e) => {
