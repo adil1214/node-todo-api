@@ -14,7 +14,9 @@ const todosText = [{
         _id: new ObjectID()
     }, {
         text: 'third test todo',
-        _id: new ObjectID()
+        _id: new ObjectID(),
+        completed: true,
+        completedAt: 1234567
 }];
 
 // this is a hook that runs berfore each execution of a test
@@ -167,6 +169,42 @@ describe('DELETE /todos/:id', () => {
         request(app)
             .delete('/todos/12345')
             .expect(404)
+            .end(done);
+    });
+});
+
+
+describe('PATCH /todos/:id', () => {
+    it('should update the todo' , (done) => {
+        let newData = {
+            text: "testing changing the first todo",
+            completed: true
+        };
+        request(app)
+            .patch(`/todos/${todosText[0]._id}`)
+            .send(newData)
+            .expect(200)
+            .expect((res) => {
+                expect(res.body.todo.text).toBe("testing changing the first todo");
+                expect(res.body.todo.completed).toBe(true);
+                expect(res.body.todo.completedAt).toBeA("number");
+            })
+            .end(done);
+    });
+
+    it('should clear completedAt when todo is not completed' , (done) => {
+        let newData = {
+            text: "this one is not comleted yet",
+            completed: false
+        };
+        request(app)
+            .patch(`/todos/${todosText[0]._id}`)
+            .send(newData)
+            .expect(200)
+            .expect((res) => {
+                expect(res.body.todo.text).toBe("this one is not comleted yet");
+                expect(res.body.todo.completedAt).toNotExist();
+            })
             .end(done);
     });
 });
