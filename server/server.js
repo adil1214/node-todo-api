@@ -47,17 +47,17 @@ app.get('/todos', (req, res) => {
 
 // todo by id GET route
 app.get('/todos/:id', (req, res) => {
-    let reqId = req.params.id
-    if (!ObjectID.isValid(reqId)) {
+    let reqId = req.params.id;
+    if (!ObjectID.isValid(reqId)) {     // if id not valid
         return res.status(404).send();
     }
 
-    Todo.findById(reqId).then((doc) => {
-        if (!doc) {
+    Todo.findById(reqId).then((todo) => {
+        if (!todo) {     // if id is not in the database
             res.status(404).send({error: 'id not found in the database'});
         } else {
             // console.log('Fetching the todo with the id \"'+reqId+ '\" at ' + new Date().toLocaleString() );
-            res.status(200).send(doc);
+            res.status(200).send({todo});
         }
     }).catch((e) => {
         res.status(400).send(e);
@@ -75,7 +75,7 @@ app.delete('/todos/:id', (req, res) => {
         if (!doc) {
             res.status(404).send({error: 'id not found in the database'});
         } else {
-            res.status(200).send(doc);
+            res.status(200).send({todo: doc});
         }
     }).catch((e) => {
         res.status(400).send(e);
