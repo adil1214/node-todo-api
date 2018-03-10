@@ -1,4 +1,6 @@
-const _ = require('lodash')
+require('./config/config');
+
+const _ = require('lodash');
 const express = require('express');
 const bodyParser = require('body-parser');    
 const {ObjectID} =  require('mongodb');
@@ -8,7 +10,7 @@ let {Todo} = require('./models/todo');
 let {User} = require('./models/user');
 
 let app = express();
-const port = process.env.PORT || 3000; 
+const port = process.env.PORT; 
 
 app.use(bodyParser.json());  
 
@@ -99,7 +101,7 @@ app.post('/todos', (req, res) => {
     });
 });
 
-
+// patch route (update/edit todo)
 app.patch('/todos/:id', (req, res) => {
     let id = req.params.id;
     let body = _.pick(req.body, ['text', 'completed']);
