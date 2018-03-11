@@ -14,7 +14,8 @@ const port = process.env.PORT;
 
 app.use(bodyParser.json());  
 
-app.get('/', (req, res) => {        //homepage route
+//  homepage route
+app.get('/', (req, res) => {        
     res.status(201).send(
         '<h1>Welcome to the homepage :D <h1>' +
         '\n' + 
@@ -86,7 +87,22 @@ app.delete('/todos/:id', (req, res) => {
 });
 
 
-// post route
+// users post route 
+app.post('/users', (req, res) => {
+    let user1 =  new User(_.pick(req.body,['email', 'password']));   
+
+    user1.save()
+    .then(() => {
+        return user1.generateAuthToken();
+    }).then((token) => {
+        res.header('x-auth', token).send(user1);
+    })
+    .catch( (e) => {
+        res.status(400).send(e);
+    });
+});
+
+// todos post route
 app.post('/todos', (req, res) => {
     let todo = new Todo({
         text: req.body.text,
@@ -101,7 +117,7 @@ app.post('/todos', (req, res) => {
     });
 });
 
-// patch route (update/edit todo)
+// todos patch route (update/edit todo)
 app.patch('/todos/:id', (req, res) => {
     let id = req.params.id;
     let body = _.pick(req.body, ['text', 'completed']);
