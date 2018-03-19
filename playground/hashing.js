@@ -1,6 +1,30 @@
 const {SHA256} = require('crypto-js');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
+let password = '123abc!';
+
+// bcrypt.genSalt(10, (err, salt) => {
+//     bcrypt.hash(password, salt, (err, hash) => {
+//         console.log(hash);
+//     });
+// });
+
+console.log('\n------------------------------------------------\n');
+
+let hashedpassword = '$2a$10$9nZFhA4wpABy8deRHlYQje8N9HBDJdU0djrQXIkvJAT0XqgzfSNvW';
+
+bcrypt.compare(password, hashedpassword).then((res) => {
+    console.log(res);
+}).catch((e) => {
+    console.log(e);
+});
+
+
+
+
+//#region encrypting tokens
+/*
 let message = 'this is the fifth user here';
 let hash = SHA256(message).toString();
 
@@ -38,3 +62,5 @@ console.log(JSON.stringify(decoded, undefined, 2));
 //     console.log('Data was changed ! watch out!');
 // }
 // =========================================================================
+*/
+//#endregion
