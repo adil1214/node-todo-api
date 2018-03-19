@@ -8,6 +8,7 @@ const {ObjectID} =  require('mongodb');
 let {mongoose} = require('./db/mongoose');
 let {Todo} = require('./models/todo');
 let {User} = require('./models/user');
+let {authenticate} = require('./middleware/authenticate');
 
 let app = express();
 const port = process.env.PORT; 
@@ -25,7 +26,7 @@ app.get('/', (req, res) => {
     );
 });
 
-// users GET route
+// users GET route <================================== this one needs to be removed !!
 app.get('/users', (req, res) => {
     User.find().then((users) => {
         res.status(200).send(users);
@@ -87,7 +88,7 @@ app.delete('/todos/:id', (req, res) => {
 });
 
 
-// users post route 
+// users post route (sing-up route)
 app.post('/users', (req, res) => {
     let user1 =  new User(_.pick(req.body,['email', 'password']));   
 
@@ -143,6 +144,10 @@ app.patch('/todos/:id', (req, res) => {
     });
 });
 
+//
+app.get('/users/me', authenticate, (req, res) => {
+    res.send(req.user);
+});
 
 app.listen(port, () => {
     console.log(`Started on port ${port} :D`);
