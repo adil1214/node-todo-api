@@ -23,15 +23,13 @@ const todosText = [{
 beforeEach((done) => {
     Todo.remove({}).then(() => {
         return Todo.insertMany(todosText);
-    }).then( () => {
-        done();
-    }).catch(() => {
-        done();
-    });
+    }).then( () => done());
     
 });
 
-describe('POST /todos', () => {
+describe('POST /todos', function() {
+    this.timeout(15000);
+
     it('Should create a new todo', (done) => {
         let text1 = 'testing post request ...';
 
