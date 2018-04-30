@@ -13,8 +13,7 @@ const users = [{
     password: 'HardP4sswordT0Guess',
     tokens: [{
         access: 'auth',
-        // FIXME: make the salt an env variable
-        token: jwt.sign({_id: user1Id.toHexString(), access:'auth'}, 'abc123').toString()
+        token: jwt.sign({_id: user1Id.toHexString(), access:'auth'}, process.env.JWT_Secret).toString()
     }]
     }, {
     _id: user2Id,
@@ -22,8 +21,7 @@ const users = [{
     password: '123456',
     tokens: [{
         access: 'auth',
-        // FIXME: make the salt an env variable
-        token: jwt.sign({_id: user2Id.toHexString(), access:'auth'}, 'abc123').toString()
+        token: jwt.sign({_id: user2Id.toHexString(), access:'auth'}, process.env.JWT_Secret).toString()
     }]
 }];
 
