@@ -1,21 +1,19 @@
-let {User} = require('./../models/user');
+var {User} = require('./../models/user');
 
-let authenticate = (req, res, next) => {
-    let token = req.header('x-auth');
+var authenticate = (req, res, next) => {
+  var token = req.header('x-auth');
 
-    User.findByToken(token).then((user) => {
-        if (!user) {
-            return Promise.reject();
-        }
+  User.findByToken(token).then((user) => {
+    if (!user) {
+      return Promise.reject();
+    }
 
-        req.user = user;
-        req.token = token;
-        next();
-        // console.log('found the required user: ' , user);
-    }).catch((e) => {
-        res.status(401).send();
-    });
+    req.user = user;
+    req.token = token;
+    next();
+  }).catch((e) => {
+    res.status(401).send();
+  });
 };
-
 
 module.exports = {authenticate};
